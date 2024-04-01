@@ -1,0 +1,43 @@
+<h1>מחולל הקומבינציות</h1>
+<div class="buttons-list">
+    <button mat-button class="btn" (click)="clear()" >איפוס</button>
+    <!-- כל עוד לא הוכנס קלט הכפתורים האחרים אמורים להיות אפורים -->
+    <button mat-button class="btn" (click)="next()" [disabled]="(!combinationNumber && !currentCombination) ||
+    currentCombinationIndex >= combinationCounts ">הבא</button>
+    <button mat-button class="btn" (click)="allCombination()" [disabled]="(!combinationNumber && !currentCombination) ||
+    currentCombinationIndex >= combinationCounts">כל הקומבינציות</button>
+  </div>
+  
+
+  
+<form *ngIf="!currentCombinationState">
+  <mat-form-field class="form-field">
+    <label class="label">הזן מספר בין 1 ל 20</label>
+    <input matInput type="number" (blur)="getNumCombination()" [formControl]="inputControl" [min]="1" [max]="20" />
+    <mat-error class="errors" *ngIf="inputControl.invalid && (inputControl.dirty || inputControl.touched)">
+      <div *ngIf="inputControl.errors.max">הזן מספר עד 20</div>
+      <div *ngIf="inputControl.errors.min">הזן מספר מ 1</div>
+    </mat-error>
+  </mat-form-field>
+  <br />
+
+  
+  <!-- רק כשיחזור באמת מספר הקומבינציות מהשרת אז תציג את זה -->
+  <div class="com-counts" *ngIf="combinationCounts">
+    <label>סה"כ קומבינציות אפשריות: </label>
+    <span>{{combinationCounts}}</span>
+  </div>
+</form>
+
+
+<!-- ברגע שלוחצים על הבא, הסטטיט נהפך לאמת  ורק זה יוצג על המסך -->
+<div *ngIf="currentCombinationState" class="current-combination">
+ <span> קומבינציה מספר  {{currentCombinationIndex}}</span>
+  <div>
+    [
+    <span *ngFor="let c of currentCombination ; let i = index">{{c}}<span *ngIf="i > 0"> </span>
+    <span *ngIf="i < (currentCombination.length -1)">,</span>
+    </span>
+    ]
+  </div>
+</div>
